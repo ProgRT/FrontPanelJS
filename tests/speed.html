@@ -5,6 +5,7 @@
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script src="../../graphsimple.js/graphsimple.js" charset="utf-8"></script>
 <script src="../../simvent.js/simvent.js" charset="utf-8"></script>
+<script src="../dygraph-combined.js"></script>
 
 <link rel="stylesheet" type="text/css" href="../../graphsimple.js/css/graphsimple-clear.css" charset="utf-8"/>
 
@@ -42,7 +43,6 @@
 <script>
 	function plotgraphsimple(target, x, y){
 
-		var targetDiv = document.getElementById(target);
 		var newsvg = document.createElement("svg");
 
 		svgnum =  document.getElementsByTagName("svg").length +1;
@@ -57,8 +57,28 @@
 			.setidx(x);
 	}
 
+	function plotdygraph(target, x, y){
+
+		var newdiv = document.createElement("div");
+
+		divnum =  document.getElementsByTagName("div").length +1;
+
+		newdiv.id = "div" + divnum;
+		newdiv.className = "half surface";
+
+		targetDiv.appendChild(newdiv);
+
+		function f1(d, i, a){ return [ d[x], d[y] ]; }
+		var plotData = data.map(f1);
+		
+		var plotData = data.map(f1);
+		var graph = new Dygraph(newdiv, plotData);
+
+	}
+
 	var plotlib = [
-		plotgraphsimple
+		plotgraphsimple,
+		plotdygraph
 		];
 
 	var lung = new sv.SimpleLung();
@@ -69,6 +89,7 @@
 	var data = ventilator.ventilate(lung).timeData;
 	var numpoints = data.length;
 
+	var targetDiv = document.getElementById(target);
 	for(i in plotlib){
 		var plotfunc = plotlib[i];
 
