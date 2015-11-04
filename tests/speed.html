@@ -9,18 +9,22 @@
 <link rel="stylesheet" type="text/css" href="../../graphsimple.js/css/graphsimple-clear.css" charset="utf-8"/>
 
 <style>
+
 	body {
 		text-align:center;
 	}
+
 	.square {
 		width:400px;
 		height:400px;
 	}
+
 	.half {
 		width:600px;
 		height:200px;
 		border:1px dashed gray;
 	}
+
 	svg{
 		display:block;
 		margin-left:auto;
@@ -31,12 +35,24 @@
 
 </style>
 
-<svg id="svg1"  class="half surface"></svg>
-<svg id="svg2"  class="half surface"></svg>
+<!--svg id="svg1"  class="half surface"></svg-->
+
+<div id="main"></div>
 
 <script>
 	function plotgraphsimple(target, x, y){
-		gs.quickGraph(target, data, function(d){return d[x]}, function(d){return d[y]})
+
+		var targetDiv = document.getElementById(target);
+		var newsvg = document.createElement("svg");
+
+		svgnum =  document.getElementsByTagName("svg").length +1;
+
+		newsvg.id = "svg" + svgnum;
+		newsvg.className = "half surface";
+
+		targetDiv.appendChild(newsvg);
+
+		gs.quickGraph("#" + newsvg.id, data, function(d){return d[x]}, function(d){return d[y]})
 			.setidy(y)
 			.setidx(x);
 	}
@@ -57,7 +73,7 @@
 		var plotfunc = plotlib[i];
 
 		var tstart = Date.now();
-		plotfunc("#svg1", "time", "Flung");
+		plotfunc("main", "time", "Flung");
 		var duration = Date.now() - tstart;
 		
 		console.log("==================");

@@ -8,28 +8,28 @@ fp = {};
 
 
 fp.dygraphConf = {
-includeZero: true,
-			strokeWidth: 2,
-			color: "hsl(220, 100%, 36%)",
-			fillGraph:false,
-		  	drawGrid:false,
-		  	drawAxesAtZero:true,
-			//showRoller:true,
-			//rollPeriod:4,
-			digitsAfterDecimal:3,
-			animatedZooms:true,
-			//drawYGrid:true,
-			axes:{
-				x:{
-					pixelsPerLabel:30,
-					drawGrid: false
-				  },
-				y:{
-					pixelsPerLabel:15,
-					drawGrid: true
-				  }
-			},
-			valueFormatter:function(v){return Math.round(1000 * v)/1000}
+	includeZero: true,
+	strokeWidth: 2,
+	color: "hsl(220, 100%, 36%)",
+	fillGraph:false,
+	drawGrid:false,
+	drawAxesAtZero:true,
+	//showRoller:true,
+	//rollPeriod:4,
+	digitsAfterDecimal:3,
+	animatedZooms:true,
+	//drawYGrid:true,
+	axes:{
+		x:{
+			pixelsPerLabel:30,
+			drawGrid: false
+		  },
+		y:{
+			pixelsPerLabel:15,
+			drawGrid: true
+		  }
+	},
+	valueFormatter:function(v){return Math.round(1000 * v)/1000}
 };
 
 fp.flotConf = {
@@ -331,13 +331,13 @@ fp.initDyGraph = function(){
 		fp.graphics.push(new Dygraph(div, [[0,0]], fp.dygraphConf));
 	}
 	fp.sync = Dygraph.synchronize(
-			fp.graphics,
-			{
-				selection: true,
-				zoom: true,
-				range: false
-			}
-			);
+		fp.graphics,
+		{
+			selection: true,
+			zoom: true,
+			range: false
+		}
+	);
 
 }
 fp.initFlotGraph = function(){
