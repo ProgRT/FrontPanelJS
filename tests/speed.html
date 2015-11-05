@@ -6,6 +6,8 @@
 <script src="../../graphsimple.js/graphsimple.js" charset="utf-8"></script>
 <script src="../../simvent.js/simvent.js" charset="utf-8"></script>
 <script src="../dygraph-combined.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.js"></script>
 
 <link rel="stylesheet" type="text/css" href="../../graphsimple.js/css/graphsimple-clear.css" charset="utf-8"/>
 
@@ -21,7 +23,7 @@
 	}
 
 	.half {
-		width:600px;
+		width:100%;
 		height:200px;
 		border:1px dashed gray;
 	}
@@ -43,6 +45,7 @@
 <script>
 	function plotgraphsimple(target, x, y){
 
+		var targetDiv = document.getElementById(target);
 		var newsvg = document.createElement("svg");
 
 		svgnum =  document.getElementsByTagName("svg").length +1;
@@ -59,6 +62,7 @@
 
 	function plotdygraph(target, x, y){
 
+		var targetDiv = document.getElementById(target);
 		var newdiv = document.createElement("div");
 
 		divnum =  document.getElementsByTagName("div").length +1;
@@ -76,10 +80,36 @@
 
 	}
 
+
+	function plotflot(target, x, y){
+
+	$("#" + target).append("<div class='half' id='graph3'></div>");
+		function f1(d){
+		      return [d[x], d[y]];
+	       }
+		
+		var plotData = data.map(f1);
+
+		divnum =  document.getElementsByTagName("div").length +1;
+
+		var flotData = [ {data:plotData} ];
+
+		var plot = $.plot("#graph3", flotData)
+
+		plot.setData(flotData);
+		plot.setupGrid();
+		plot.draw();
+	}
+
+/********
+  Benchmark
+  **********/
+
 	var plotlib = [
 		plotgraphsimple,
-		plotdygraph
-		];
+		plotdygraph,
+		plotflot
+	];
 
 	var lung = new sv.SimpleLung();
 	lung.Raw = 15;
@@ -89,7 +119,6 @@
 	var data = ventilator.ventilate(lung).timeData;
 	var numpoints = data.length;
 
-	var targetDiv = document.getElementById(target);
 	for(i in plotlib){
 		var plotfunc = plotlib[i];
 

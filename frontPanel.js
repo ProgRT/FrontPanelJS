@@ -59,17 +59,21 @@ fp.lowPassFactor = 3;
 
 fp.paramContainer = "#panel";
 fp.jparamContainer = "panel";
+
 fp.lungModels = [
 	"SimpleLung",
 	"SygLung"
 	];
+
 fp.lungModel = "SimpleLung";
 
 fp.ventModels = [
 	"PresureControler",
 	"VDR",
-	"PVCurve"
+	"PVCurve",
+	"FlowControler"
 	]
+
 fp.progressDelay = 50;
 
 // *****************************
@@ -226,15 +230,16 @@ fp.download = function(objArray)
 
 fp.paramTable = function(object, paramSet, container, label){
 	if(typeof object[paramSet] != "undefined"){
+
 		$(label).detach();
-		$(container).append("<table id="+label+"></table>");
+		$(container).append("<table id=" + label +"></table>");
 		var table = $("#" + label) ; 
 		if(typeof label != "undefined"){table.append("<caption>"+label+"</caption>");}
 
 		for(id in object[paramSet]){
 
 			var param = object[paramSet][id];
-			var abrev = id; // abrev will eventualy beset to a translated value
+			var abrev = id; // abrev will eventualy be set to a translated value
 			if (typeof param.unit != "undefined"){var unit = param.unit;}
 			else {var unit = "";}
 
@@ -285,6 +290,7 @@ fp.timeSeries = [
 	"Flung",
 	"Palv",
 	"Vt",
+	"PCO2"
 	];
 
 
@@ -305,6 +311,12 @@ fp.timeSeries2 = [
 		id: "Palv", 
 		dataSets:[
 			{ dataSet: "timeData", key: "Palv"}
+		]
+	},
+	{
+		id: "PCO₂", 
+		dataSets:[
+			{ dataSet: "timeData", key: "PCO2"}
 		]
 	}
 ];
@@ -340,6 +352,7 @@ fp.initDyGraph = function(){
 	);
 
 }
+
 fp.initFlotGraph = function(){
 	for (index in fp.timeSeries){
 
