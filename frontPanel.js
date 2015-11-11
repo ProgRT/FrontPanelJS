@@ -32,8 +32,6 @@ fp.dygraphConf = {
 	valueFormatter:function(v){return Math.round(1000 * v)/1000}
 };
 
-fp.lowPassFactor = 3;
-
 fp.paramContainer = "#panel";
 fp.jparamContainer = "panel";
 
@@ -57,17 +55,6 @@ fp.progressDelay = 50;
 // Translation of the user interface
 // **********************************
 
-fp.translate = function(obj){
-	if(obj[navigator.language]){
-		var text =obj[navigator.language];
-	}
-
-	else{
-		var text = obj["en"];
-	}
-	return text;
-};
-
 fp.translate1 = function(toTranslate, length){
 	if(typeof dict[toTranslate]  != 'undefined' &&  length in dict[toTranslate] && navigator.language in dict[toTranslate][length]){
 		return dict[toTranslate][length][navigator.language];
@@ -78,24 +65,6 @@ fp.translate1 = function(toTranslate, length){
 		return toTranslate;
 	}
 };
-
-fp.titles = [
-	"Help",
-	"About",
-	"Simulator",
-	"Parameters",
-	"Lung"
-];
-/*
-for (i in fp.titles) {
-	var element = $("#" + fp.titles[i]);
-	var label = dict[fp.titles[i]];
-	element.text(fp.translate1(label));
-}
-*/
-//var text = fp.translate(dict.aboutText);
-//$("#aboutText").text(text);
-
 
 
 // **********************************
@@ -404,7 +373,7 @@ fp.ventChange = function(){
 	var newVent = select.options[select.selectedIndex].value;
 	fp.ventModel = newVent;
 	fp.ventilator = new sv[newVent];
-	fp.reinit();
+	fp.init();
 }
 
 fp.init = function(){
@@ -419,32 +388,6 @@ fp.init = function(){
 	fp.paramTable(fp.lung, "mechParams", fp.paramContainer, fp.translate1("Lung", "long")); 
 
 	$(fp.paramContainer).append('<button id="ventiler" value="ventiler" onClick="maj()">Ventiler</button>');
-
-	fp.graphics = [];
-	fp.initDyGraph()
-	maj();
-	
-	// Gestion des racourcis clavier
-	$("#panel input").keypress(function(event){
-		if (event.which == 13){ $("#ventiler").click(); }
-	});
-	$("input").change(function(){
-		fp.updateModels();
-	});
-	$("input").keyup(function(){
-		fp.updateModels();
-	});
-};
-fp.reinit = function(){
-	if(typeof fp.lung == "undefined"){fp.lung = new sv[fp.lungModel]();}
-	$(fp.paramContainer + " table").children().remove();
-	//fp.ventMenu();
-
-	fp.paramTable(fp.ventilator, "ventParams", fp.paramContainer, "Parameters"); 
-	fp.paramTable(fp.ventilator, 'simParams', fp.paramContainer, "Simulator"); 
-	fp.paramTable(fp.lung, "mechParams", fp.paramContainer, "Lung"); 
-
-	//$(fp.paramContainer).append('<button id="ventiler" value="ventiler" onClick="maj()">Ventiler</button>');
 
 	fp.graphics = [];
 	fp.initDyGraph()
