@@ -32,29 +32,6 @@ fp.dygraphConf = {
 	valueFormatter:function(v){return Math.round(1000 * v)/1000}
 };
 
-fp.flotConf = {
-	yaxis:{labelWidth:30},
-	xaxis:{ticks:10},
-	legend:{
-		position:"nw",
-		backgroundOpacity: 0.7,
-		backgroundColor: "white",
-	},
-	series:{
-		lines:{lineWidth:1.5},
-		shadowSize:0
-	},
-	selection: {
-		mode:"x"
-	}
-};
-
-
-fp.filters = [
-	"meanOfTwo",
-	"skipPeak"
-];
-
 fp.lowPassFactor = 3;
 
 fp.paramContainer = "#panel";
@@ -76,56 +53,6 @@ fp.ventModels = [
 
 fp.progressDelay = 50;
 
-// *****************************
-// Filters
-// *****************************
-
-fp.noFilter = function(d){
-	return d
-};
-
-fp.meanOfTwo = function(d,i,a){
-	if (i == a.length - 1){
-		return d;
-	}
-	else{
-		return [
-			d[0],
-			(d[1] + a[i + 1][1])/2
-			];
-	}
-};
-
-fp.skipPeak = function(d,i,a){
-
-	if (i > a.length - 3  | i == 0){return d;}
-	else if(d[1] > 1.05 * a[i - 1][1] && d[1] > 1.05  * a[i + 2][1]){
-		return [d[0], a[i + 2][1]];
-		//return null;
-	}
-	else {return d};
-}
-
-fp.downSample = function(d,i,a){
-	return i % 2 == 0;
-};
-
-fp.cropData = function(d,i,a){
-	return d.time > fp.xmin && d.time < fp.xmax;
-};
-
-fp.lowPass = function(arr){
-	var smoothed = arr[0][1];
-	for (var index = 1, len = arr.length; index<len; ++index){
-		var currentValue = arr[index][1];
-		smoothed += (currentValue - smoothed) / fp.lowPassFactor;
-		arr[index][1] = smoothed;
-	}
-	return arr;
-}
-
-
-
 // **********************************
 // Translation of the user interface
 // **********************************
@@ -141,6 +68,17 @@ fp.translate = function(obj){
 	return text;
 };
 
+fp.translate1 = function(toTranslate, length){
+	if(typeof dict[toTranslate]  != 'undefined' &&  length in dict[toTranslate] && navigator.language in dict[toTranslate][length]){
+		return dict[toTranslate][length][navigator.language];
+	}
+
+	else {
+		console.log("Was unable to translate \"" + toTranslate +"\"");
+		return toTranslate;
+	}
+};
+
 fp.titles = [
 	"Help",
 	"About",
@@ -148,15 +86,15 @@ fp.titles = [
 	"Parameters",
 	"Lung"
 ];
-
+/*
 for (i in fp.titles) {
 	var element = $("#" + fp.titles[i]);
 	var label = dict[fp.titles[i]];
-	element.text(fp.translate(label));
+	element.text(fp.translate1(label));
 }
-
-var text = fp.translate(dict.aboutText);
-$("#aboutText").text(text);
+*/
+//var text = fp.translate(dict.aboutText);
+//$("#aboutText").text(text);
 
 
 
@@ -239,14 +177,15 @@ fp.paramTable = function(object, paramSet, container, label){
 		for(id in object[paramSet]){
 
 			var param = object[paramSet][id];
-			var abrev = id; // abrev will eventualy be set to a translated value
+			//var abrev = id; // abrev will eventualy be set to a translated value
+			var abrev = fp.translate1(id, "short");
 			if (typeof param.unit != "undefined"){var unit = param.unit;}
 			else {var unit = "";}
 
 			var tr = $("<tr></tr>");
 
 			var td = $("<td></td>")
-					//.attr("title", fp.translate(dict[id].long))
+					.attr("title", fp.translate1(id, "long"))
 					.html(abrev + " :")
 					.appendTo(tr);
 
@@ -260,13 +199,12 @@ fp.paramTable = function(object, paramSet, container, label){
 			}
 			else{
 				var input = $("<input></input>")
-								.attr("id", 'input' + id)
-								.attr("value", object[id])
-								.attr("size", '6')
-								.attr("type", 'number')
-								.attr("step", param.step)
-								//.click(function(){this.select()})
-								.appendTo(td);
+						.attr("id", 'input' + id)
+						.attr("value", object[id])
+						.attr("size", '6')
+						.attr("type", 'number')
+						.attr("step", param.step)
+						.appendTo(td);
 			}
 			tr.append(td);
 			var unitSpan = $("<td class='unit'>" + unit + "</td>")
@@ -328,7 +266,7 @@ fp.initDyGraph = function(){
 		var id = fp.timeSeries[index];
 		var idgraph = "#graph" + id;
 		if (typeof dict[id] != "undefined"){
-			var label = fp.translate(dict[fp.timeSeries[index]].long);
+			var label = fp.translate1(fp.timeSeries[index], "long");
 		}
 		else { label = id}
 
@@ -353,84 +291,10 @@ fp.initDyGraph = function(){
 
 }
 
-fp.initFlotGraph = function(){
-	for (index in fp.timeSeries){
-
-		var id = fp.timeSeries[index];
-		var idgraph = "#graph" + id;
-		var label = fp.translate(dict[fp.timeSeries[index]].long);
-
-		$("#graphics").append("<div class='graph' id='graph" + id + "'></div>");
-
-		fp.graphics.push($("#graph" + id).plot([], fp.flotConf).data("plot"));
-	}
-
-	// Interacton with graphics
-
-	$(".graph").bind("plotselected", function( event, ranges){
-		fp.xmin = ranges.xaxis.from;
-		fp.xmax = ranges.xaxis.to;
-
-		fp.plot();
-
-		for (i in fp.graphics){fp.graphics[i].clearSelection();}
-	});
-
-	$(".graph").dblclick(function(){
-		fp.xmin = null;
-		fp.xmax = null;
-		fp.plot();
-	});
-}
 
 // *****************************
 // Mise à jour des graphiques
 // *****************************
-
-
-fp.filter = function(set){
-
-	for (i in fp.filters){
-		set = set.map(fp[fp.filters[i]]);
-	}
-	return set;
-};
-
-fp.plotFlot = function(){
-
-	if(fp.xmin && fp.xmax){
-		var dataSet = fp.timeData.filter(fp.cropData);
-	}
-	else{
-		var dataSet = fp.timeData;
-	}
-
-	for (index in fp.timeSeries){
-
-		var param = fp.timeSeries[index];
-		var id = param;
-		var label = fp.translate(dict[id].long);
-
-		function f1(d, i, a){ return [ d["time"], d[id] ]; }
-		
-		var data = dataSet.map(f1);
-
-		data = fp.filter(data);
-		
-		while(data > $("#graphics").width()){
-			data = data.filter(fp.downSample);
-		}
-
-
-		
-		var flotData = [ {data:data, label:label} ];
-
-		fp.graphics[index].setData(flotData);
-		fp.graphics[index].setupGrid();
-		fp.graphics[index].draw();
-	}
-}
-
 
 fp.plotDygraph1 = function(){
 
@@ -477,6 +341,10 @@ fp.plotDygraph = function(index){
 	fp.graphics[0].resetZoom();
 }
 
+/**********************************
+ * Progressbar
+ * *******************************/
+
 fp.progressBar = function(){
 	fp.pbTimer = setTimer(function(){
 
@@ -494,16 +362,14 @@ fp.initProgress = function(){
 
 };
 
-fp.progress = function(fname){
-	
-}
-
-
 fp.stopProgress = function(){
 	setTimeout(function(){
 		document.body.removeChild(fp.pDiv);
 	},100);
 };
+
+/*******************************************/
+/*******************************************/
 
 function maj() {
 	fp.initProgress();
@@ -548,9 +414,9 @@ fp.init = function(){
 	$(fp.paramContainer).children().remove();
 	fp.ventMenu();
 
-	fp.paramTable(fp.ventilator, "ventParams", fp.paramContainer, "Parameters"); 
-	fp.paramTable(fp.ventilator, 'simParams', fp.paramContainer, "Simulator"); 
-	fp.paramTable(fp.lung, "mechParams", fp.paramContainer, "Lung"); 
+	fp.paramTable(fp.ventilator, "ventParams", fp.paramContainer, fp.translate1("Parameters", "long")); 
+	fp.paramTable(fp.ventilator, 'simParams', fp.paramContainer, fp.translate1("Simulator", "long")); 
+	fp.paramTable(fp.lung, "mechParams", fp.paramContainer, fp.translate1("Lung", "long")); 
 
 	$(fp.paramContainer).append('<button id="ventiler" value="ventiler" onClick="maj()">Ventiler</button>');
 

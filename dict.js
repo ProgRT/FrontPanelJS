@@ -1,36 +1,28 @@
 var dict = {
-	Help:{
-		en: "Help",
-		fr: "Aide"
-	},
-	About:{
-		en:"About",
-		fr:"À propos"
-	},
 	Simulator:{
-		en:"Simulator",
-		fr:"Simulateur"
-			  },
+		long: {
+			en:"Simulator",
+			fr:"Simulateur"
+			  }
+	},
 	Parameters:{
-		en:"Parameters",
-		fr:"Paramètres"
-			   },
+		long: {
+			en:"Parameters",
+			fr:"Paramètres"
+		}
+	   },
 	Lung:{
+		long: {
 		en:"Lung",
 		fr:"Poumon"
-		 },
+		}
+	 },
 	Ventilate:{
-		en:"Ventilate",
-		fr:"Ventiler"
-			  },
-	aboutText:{
-		en: "VDR.js is a convective and diffusive mechanical ventilation simulator. \
-			   You can change the mechanical ventilation parameters ou pulmonary mechanics\
-			   and observe the effect on the system.",
-		fr: "VDR.js est un simulateur de ventilation mécanique diffusive et convective. \
-			Vous pouvez modifier les paramètres de ventilation ou la mécanique du poumon\
-			et observer les répercussions sur le système."
-			  },
+		long : {
+			en:"Ventilate",
+			fr:"Ventiler"
+		}
+	  },
 	Tip:{
 		long:{
 			en:"Percussive inspiratory time",
@@ -185,6 +177,21 @@ var dict = {
 			en:"P<sub>alv</sub>"
 		}
 	},
+	PCO2 : {
+		short: {
+			fr: 'PCO₂',
+			en: 'PCO₂'
+		},
+		long: {
+			fr: 'PCO₂',
+			en: 'PCO₂'
+		}
+	},
+	Pinspi: {
+		long: {
+			fr: 'Pression inspiratoire'
+		}
+	},
 	Vt:{
 		long:{
 			en:"Tidal volume",
@@ -249,6 +256,16 @@ var dict = {
 		short: {
 			en: "R<sub>exp</sub>"
 			   }
-		  }
+		  },
+	PEEP :{
+		long : {
+			en : "Positive end expiratoy presure",
+			fr: "Pression expiratoire positive"
+		},
+		short : {
+			en : "PEEP",
+			fr : "PEP"
+		}
+	}
 
 };
