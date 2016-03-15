@@ -19,6 +19,7 @@ fp.dygraphConf = {
 	digitsAfterDecimal:3,
 	animatedZooms:true,
 	//drawYGrid:true,
+	interactionModel:{},
 	axes:{
 		x:{
 			pixelsPerLabel:30,
@@ -43,7 +44,8 @@ fp.lungModels = [
 fp.lungModel = "SimpleLung";
 
 fp.ventModels = [
-	"PresureControler",
+	"PressureAssistor",
+	"PressureControler",
 	"VDR",
 	"PVCurve",
 	"FlowControler"
@@ -135,6 +137,10 @@ fp.download = function(objArray)
 // Création du tableau des paramètres
 // **********************************
 
+fp.iSelect = function(){
+	this.select();
+}
+
 fp.paramTable = function(object, paramSet, container, label){
 	if(typeof object[paramSet] != "undefined"){
 
@@ -173,6 +179,7 @@ fp.paramTable = function(object, paramSet, container, label){
 						.attr("size", '6')
 						.attr("type", 'number')
 						.attr("step", param.step)
+						.attr("onFocus", 'this.select()')
 						.appendTo(td);
 			}
 			tr.append(td);
@@ -260,29 +267,9 @@ fp.initDyGraph = function(){
 
 }
 
-
 // *****************************
 // Mise à jour des graphiques
 // *****************************
-
-fp.plotDygraph1 = function(){
-
-	for (index in fp.timeSeries){
-
-		var param = fp.timeSeries[index];
-		var id = param;
-		//var label = fp.translate(dict[id].long);
-
-		function f1(d, i, a){ return [ d["time"], d[id] ]; }
-		
-		var data = fp.timeData.map(f1);
-
-		fp.graphics[index].updateOptions({file: data});
-		
-
-	}
-	fp.graphics[0].resetZoom();
-}
 
 fp.plotDygraph = function(index){
 
@@ -297,17 +284,17 @@ fp.plotDygraph = function(index){
 		fp.graphics[index].updateOptions({file: data});
 		fp.pBarr.value = (index + 1)/fp.timeSeries.length;
 		
-	if(index < fp.timeSeries.length - 1){
-		++ index;
-		setTimeout(function(){
-			fp.plotDygraph(index)
-		}, 10);
-	}
-	else{
-		//fp.stopProgress();
-		setTimeout(function(){fp.stopProgress();},50);
-	}
-	fp.graphics[0].resetZoom();
+		if(index < fp.timeSeries.length - 1){
+			++ index;
+			setTimeout(function(){
+				fp.plotDygraph(index)
+			}, 10);
+		}
+		else{
+			//fp.stopProgress();
+			setTimeout(function(){fp.stopProgress();},50);
+		}
+		fp.graphics[0].resetZoom();
 }
 
 /**********************************
