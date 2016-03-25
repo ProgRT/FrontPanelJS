@@ -102,7 +102,7 @@ fp.ventilate = function(){
 
 	fp.ventilator.time = 0;
 	fp.data = fp.ventilator.ventilate(fp.lung);
-	fp.timeData = fp.data.timeData
+	fp.timeData = fp.data.timeData;
 }
 
 fp.download = function(objArray)
@@ -265,6 +265,26 @@ fp.initDyGraph = function(){
 		}
 	);
 
+}
+
+// **********************************
+// Paneau de sélection des graphiques
+// **********************************
+
+function mkTsSelect(){
+	for(data in fp.timeData[0]){
+		var para = document.createElement("p");
+		var checkbox = document.createElement("input");
+		checkbox.type = "checkbox";
+		if(fp.timeSeries.includes(data)){
+			checkbox.checked = true;
+		}
+		para.appendChild(checkbox);
+		var node = document.createTextNode(" " + data);
+		para.appendChild(node);
+		document.body.appendChild(para);
+		
+	}
 }
 
 // *****************************
