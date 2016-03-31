@@ -147,7 +147,7 @@ fp.paramTable = function(object, paramSet, container, label){
 		$(label).detach();
 		$(container).append("<table id=" + label +"></table>");
 		var table = $("#" + label) ; 
-		if(typeof label != "undefined"){table.append("<caption>"+label+"</caption>");}
+		if(typeof label != "undefined"){table.append("<th colspan='3' class='fp-tableSection'>"+label+"</th>");}
 
 		for(id in object[paramSet]){
 
@@ -176,7 +176,7 @@ fp.paramTable = function(object, paramSet, container, label){
 				var input = $("<input></input>")
 						.attr("id", 'input' + id)
 						.attr("value", object[id])
-						.attr("size", '6')
+						.attr("size", '3')
 						.attr("type", 'number')
 						.attr("step", param.step)
 						.attr("onFocus", 'this.select()')
