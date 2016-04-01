@@ -145,9 +145,12 @@ fp.paramTable = function(object, paramSet, container, label){
 	if(typeof object[paramSet] != "undefined"){
 
 		$(label).detach();
-		$(container).append("<table id=" + label +"></table>");
-		var table = $("#" + label) ; 
-		if(typeof label != "undefined"){table.append("<th colspan='3' class='fp-tableSection'>"+label+"</th>");}
+		if(document.getElementById('fpParamTable') == null){
+			$(container).append("<table id=\"fpParamTable\"></table>");
+		}
+		//var table = $("#" + label) ; 
+		var table = $("#fpParamTable") ; 
+		if(typeof label != "undefined"){table.append("<tr><th colspan='3' class='fp-tableSection'>"+label+"</th></tr>");}
 
 		for(id in object[paramSet]){
 
