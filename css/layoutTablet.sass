@@ -1,14 +1,26 @@
 $panelWidth: 250px
-$graphHeight: 175px
+$graphHeight: 160px
 
+html, body
+	padding: 0px
+	margin: 0px
 #panel
+	//border: 1px dashed red
 	width: $panelWidth
 	position: absolute
 	top: 0px
 	right: 0px
 
 #graphics
-	width: calc(100% - #{$panelWidth})
+	margin: 0px
+	//border: 1px dashed red
+	width: calc(100% - #{$panelWidth} - 30px)
+	padding-right: 20px
+	box-sizing: border-box
+
 	div.graph
+		box-sizing: border-box
+		//border: 1px dashed blue
 		width: 100%
 		height: $graphHeight
+		margin-top: 20px

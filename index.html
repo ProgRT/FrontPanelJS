@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>simvent.js ventilator front panel demonstration</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
 	<meta charset="utf-8">
+
 	<!--script src="firebug-lite.js#startOpened"></script-->
 	<script src="jquery.min.js"></script>
 	<script src="dygraph-combined.js"></script>
 	<script src="synchronizer.js"></script>
-	<script src="../simvent.js/simvent.js"></script>
+	<!--script src="../simvent.js/simvent.js"></script-->
+	<script src="https://raw.githubusercontent.com/progrt/simvent.js/master/simvent.js"></script>
 	<script src="dict.js"></script>
+	<script src="jquery.terminal-min.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="css/paramTable.css" charset="utf-8" />
-	<link rel="stylesheet" type="text/css" href="css/layoutTablet.css" charset="utf-8" />
-	<link rel="stylesheet" type="text/css" href="css/progress.css" charset="utf-8" />
-	<link rel="stylesheet" type="text/css" href="css/typography.css" charset="utf-8" />
+	<link rel="stylesheet" type="text/css" href="css/frontpanel-demo.css" charset="utf-8" />
 
 	<style>
 	</style>
@@ -29,11 +29,10 @@
 
 	<div id="graphics"> </div>
 
-
 	<script src="frontPanel.js" ></script>
 	<script>
 		fp.timeSeries = ["Pao","Flung","Vt", "PCO2"];
-		fp.ventModel = "PresureControler";
+		fp.ventModel = "PressureAssistor";
 		fp.lungModel = "SptLung";
 		fp.init()
 	</script>

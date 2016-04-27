@@ -274,16 +274,28 @@ fp.initDyGraph = function(){
 // Paneau de sélection des graphiques
 // **********************************
 
-function mkTsSelect(){
-	for(data in fp.timeData[0]){
-		var para = document.createElement("p");
+fp.updateTSParam = function(){
+
+	console.log(this.checked);
+}
+fp.mkTsSelect = function(){
+	var params =sv.log(fp.lung, fp.ventilator);
+	delete params.time;
+	var keys = [];
+	for(key in params){keys.push(key)};
+	keys = keys.sort(function (a, b) {
+    return a.toLowerCase().localeCompare(b.toLowerCase());
+});
+	for(var i in keys){
+		var para = document.createElement("span");
 		var checkbox = document.createElement("input");
 		checkbox.type = "checkbox";
-		if(fp.timeSeries.includes(data)){
+		checkbox.onChange = fp.updateTSParam;
+		if(fp.timeSeries.includes(keys[i])){
 			checkbox.checked = true;
 		}
 		para.appendChild(checkbox);
-		var node = document.createTextNode(" " + data);
+		var node = document.createTextNode(" " + keys[i]);
 		para.appendChild(node);
 		document.body.appendChild(para);
 		
@@ -413,4 +425,5 @@ fp.init = function(){
 	$("input").keyup(function(){
 		fp.updateModels();
 	});
+	fp.mkTsSelect();
 };
