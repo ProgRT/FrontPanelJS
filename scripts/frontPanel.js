@@ -425,5 +425,4 @@ fp.init = function(){
 	$("input").keyup(function(){
 		fp.updateModels();
 	});
-	fp.mkTsSelect();
 };
