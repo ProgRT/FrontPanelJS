@@ -65,6 +65,14 @@ var dict = {
 			en:"V'<sub>lung</sub>"
 		}
 	},
+	Ftrig:{
+		long:{
+			fr:"Déclenchement"
+		},
+		short:{
+			fr:"V'<sub>décl.</sub>"
+		}
+	},
 	lowPassFactor: {
 		short:{
 			en:"lowPass",
@@ -104,6 +112,10 @@ var dict = {
 		short:{
 			en:"P<sub>alv</sub>"
 		}
+	},
+	Passist: {
+		long: {fr: "Aide inspiratoire"},
+		short: {fr: "P<sub>AI</sub>"}
 	},
 	PCO2 : {
 		short: {
@@ -154,6 +166,26 @@ var dict = {
 			en:"Simulator",
 			fr:"Simulateur"
 			  }
+	},
+	Ti:{
+		long:{
+			en:"Inspiratory time",
+			fr:"Temps inspiratoire"
+		 },
+		short:{
+			en:"T<sub>i</sub>",
+			fr:"T<sub>i</sub>"
+		 }
+	},
+	Te:{
+		long:{
+			en:"Expiratory time",
+			fr:"Temps expiratoire"
+		 },
+		short:{
+			en:"T<sub>e</sub>",
+			fr:"T<sub>e</sub>"
+		 }
 	},
 	Tip:{
 		long:{
