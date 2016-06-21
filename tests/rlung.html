@@ -31,7 +31,13 @@
 
 	<script src="../scripts/frontPanel.js" ></script>
 	<script>
-		fp.timeSeries = ["Pao","Flung","Vt", "PCO2"];
+		fp.timeSeries = ["Pao","Vt"];
+		fp.loops = [
+			{
+				x: "Palv",
+				y: "Vt"
+			}
+		];
 		fp.ventModel = "PVCurve";
 		fp.lungModel = "RLung";
 		fp.init()

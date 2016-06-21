@@ -238,6 +238,8 @@ fp.timeSeries2 = [
 	}
 ];
 
+
+
 fp.initDyGraph = function(){
 	$(".graph").detach();
 	for (index in fp.timeSeries){
@@ -250,7 +252,6 @@ fp.initDyGraph = function(){
 		else { label = id}
 
 		var conf = fp.dygraphConf;
-		//conf.ylabel = label;
 		conf.title = label;
 		conf.labels = ["Time", id];
 
@@ -259,6 +260,28 @@ fp.initDyGraph = function(){
 
 		fp.graphics.push(new Dygraph(div, [[0,0]], fp.dygraphConf));
 	}
+
+	for (index in fp.loops){
+
+		var loop = fp.loops[index];
+		var id = loop.x + "-" + loop.y;
+		var idgraph = "#graph" + id;
+		if (typeof dict[id] != "undefined"){
+			var label = fp.translate1(fp.timeSeries[index], "long");
+		}
+		else { label = id}
+
+		var conf = fp.dygraphConf;
+		conf.title = label;
+		//conf.labels = ["Time", id];
+
+		$("#graphics").append("<div class='loop' id='graph" + id + "'></div>");
+		var  div = document.getElementById("graph" + id);
+
+		fp.graphics.push(new Dygraph(div, [[0,0]], fp.dygraphConf));
+	}
+
+	/**
 	fp.sync = Dygraph.synchronize(
 		fp.graphics,
 		{
@@ -267,6 +290,7 @@ fp.initDyGraph = function(){
 			range: false
 		}
 	);
+**/
 
 }
 
@@ -327,11 +351,41 @@ fp.plotDygraph = function(index){
 		}
 		else{
 			//fp.stopProgress();
-			setTimeout(function(){fp.stopProgress();},50);
+			//setTimeout(function(){fp.stopProgress();},50);
 		}
 		fp.graphics[0].resetZoom();
 }
 
+fp.plotDyloop = function(index){
+
+		var param = fp.loops[index - fp.timeSeries.length];
+		var id = param;
+		//var label = fp.translate(dict[id].long);
+
+		function f1(d, i, a){
+			return [
+				d[param.x], 
+				d[param.y] 
+			]; 
+		}
+		
+		var data = fp.timeData.map(f1);
+
+		fp.graphics[index].updateOptions({file: data});
+		fp.pBarr.value = (index + 1)/fp.timeSeries.length;
+		
+		if(index < fp.timeSeries.length - 1){
+			++ index;
+			setTimeout(function(){
+				fp.plotDyloop(index)
+			}, 10);
+		}
+		else{
+			//fp.stopProgress();
+			setTimeout(function(){fp.stopProgress();},50);
+		}
+		fp.graphics[0].resetZoom();
+}
 /**********************************
  * Progressbar
  * *******************************/
@@ -343,6 +397,7 @@ fp.progressBar = function(){
 }
 
 fp.initProgress = function(){
+	console.log("fp.initProgress()");
 	fp.pDiv = document.createElement("div");
 	fp.pDiv.id = "pDiv";
 	fp.pDiv.textContent = "Updating graphics...";
@@ -363,6 +418,7 @@ fp.stopProgress = function(){
 /*******************************************/
 
 function maj() {
+	console.log("fp.maj()");
 	fp.initProgress();
 	setTimeout(function(){
 		fp.updateModels();
@@ -370,7 +426,7 @@ function maj() {
 		fp.xmin = null;
 		fp.ymin = null;
 		fp.plotDygraph(0)
-		//fp.plotDygraph1()
+		fp.plotDyloop(fp.timeSeries.length)
 	}, 50);
 }
 
@@ -412,7 +468,7 @@ fp.init = function(){
 	$(fp.paramContainer).append('<button id="ventiler" value="ventiler" onClick="maj()">Ventiler</button>');
 
 	fp.graphics = [];
-	fp.initDyGraph()
+	fp.initDyGraph();
 	maj();
 	
 	// Gestion des racourcis clavier
