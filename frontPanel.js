@@ -9,7 +9,7 @@ fp = {};
 
 fp.dygraphConf = {
 	includeZero: true,
-	strokeWidth: 2,
+	strokeWidth: 1,
 	color: "hsl(220, 100%, 36%)",
 	fillGraph:false,
 	drawGrid:false,
