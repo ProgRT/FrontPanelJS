@@ -53,11 +53,25 @@ fp.ventModels = [
 
 fp.progressDelay = 50;
 
+fp.languages = {
+	long: navigator.language,
+	short: navigator.language.substr(0,2),
+	fallback: "en"
+	};
+for (language in fp.languages){
+	console.log(language + ": " + fp.languages[language]);
+}
 // **********************************
 // Translation of the user interface
 // **********************************
 
 fp.translate1 = function(toTranslate, length){
+	if(typeof dict[toTranslate]  != 'undefined' &&  length in dict[toTranslate] && navigator.language in dict[toTranslate][length]){
+		return dict[toTranslate][length][navigator.language];
+	}
+	if(typeof dict[toTranslate]  != 'undefined' &&  length in dict[toTranslate] && navigator.language in dict[toTranslate][length]){
+		return dict[toTranslate][length][navigator.language];
+	}
 	if(typeof dict[toTranslate]  != 'undefined' &&  length in dict[toTranslate] && navigator.language in dict[toTranslate][length]){
 		return dict[toTranslate][length][navigator.language];
 	}

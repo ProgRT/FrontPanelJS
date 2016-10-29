@@ -1,3 +1,4 @@
+console.log(navigator.language);
 var dict = {
 	Simulator:{
 		long: {
