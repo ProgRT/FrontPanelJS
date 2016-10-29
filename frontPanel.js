@@ -38,7 +38,9 @@ fp.jparamContainer = "panel";
 
 fp.lungModels = [
 	"SimpleLung",
-	"SygLung"
+	"SptLung",
+	"SygLung",
+	"RLung"
 	];
 
 fp.lungModel = "SimpleLung";
@@ -388,6 +390,22 @@ function maj() {
 	}, 50);
 }
 
+fp.lungMenu = function(){
+	var container = document.getElementById(fp.jparamContainer);
+	var select = document.createElement("select");
+	select.id = "lungSelect";
+	select.onchange = fp.lungChange;
+	container.appendChild(select);
+
+	for (i in fp.lungModels){
+		var option = document.createElement("option");
+		option.value = fp.lungModels[i];
+		option.textContent = fp.lungModels[i];
+		select.appendChild(option);
+	}
+	select.selectedIndex = fp.lungModels.indexOf(fp.lungModel);
+}
+
 fp.ventMenu = function(){
 	var container = document.getElementById(fp.jparamContainer);
 	var select = document.createElement("select");
@@ -404,6 +422,14 @@ fp.ventMenu = function(){
 	select.selectedIndex = fp.ventModels.indexOf(fp.ventModel);
 }
 
+fp.lungChange = function(){
+	var select = document.getElementById("lungSelect");
+	var newlung = select.options[select.selectedIndex].value;
+	fp.lungModel = newlung;
+	fp.lung = new sv[newlung];
+	fp.init();
+}
+
 fp.ventChange = function(){
 	var select = document.getElementById("ventSelect");
 	var newVent = select.options[select.selectedIndex].value;
@@ -418,6 +444,7 @@ fp.init = function(){
 
 	$(fp.paramContainer).children().remove();
 	fp.ventMenu();
+	fp.lungMenu();
 
 	fp.paramTable(fp.ventilator, "ventParams", fp.paramContainer, fp.translate1("Parameters", "long")); 
 	fp.paramTable(fp.ventilator, 'simParams', fp.paramContainer, fp.translate1("Simulator", "long")); 
