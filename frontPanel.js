@@ -126,10 +126,18 @@ fp.download = function(objArray)
     var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
     var str = '';
      
+    var line = '';
+    for (var index in array[0]) {
+	    if(line != '') line += '\t '
+
+		    line += index;
+    }
+
+    str += line + '\r\n';
     for (var i = 0; i < array.length; i++) {
         var line = '';
         for (var index in array[i]) {
-            if(line != '') line += ','
+            if(line != '') line += '\t '
          
             line += array[i][index];
         }
@@ -137,15 +145,25 @@ fp.download = function(objArray)
         str += line + '\r\n';
     }
  
+    /*
     if (navigator.appName != 'Microsoft Internet Explorer')
     {
-        window.open('data:text/csv;charset=utf-8,' + escape(str));
+        window.open('data:text/csv;charset=utf-8,' + escape(str), 'simvent.dat');
     }
     else
     {
         var popup = window.open('','csv','');
         popup.document.body.innerHTML = '<pre>' + str + '</pre>';
-    }          
+    }
+    */
+    var link = document.createElement('a');
+    link.download = 'simvent.dat';
+    link.href = 'data:text/csv;charset=utf-8,' + escape(str);
+    document.body.appendChild(link);
+    setTimeout(function(){
+    link.click();
+    document.body.removeChild(link);
+    }, 66);
 }
 
 
